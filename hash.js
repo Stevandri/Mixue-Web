@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const password = "admin12345";  // Ganti dengan password admin yang kamu inginkan
+const password = "admin12345"; 
 
 const salt = bcrypt.genSaltSync(10);
 const hashed = bcrypt.hashSync(password, salt);

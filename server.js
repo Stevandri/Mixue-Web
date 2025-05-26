@@ -8,8 +8,7 @@ const multer = require("multer");
 const db = require("better-sqlite3")("Mixue.db");
 db.pragma("journal_mode = WAL");
 const app = express();
-
-// Setup database (tambahkan kolom role di users)
+//kolom
 const createTables = db.transaction(() => {
   db.prepare(`
     CREATE TABLE IF NOT EXISTS users (
