@@ -3,772 +3,877 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Semua Produk - Mixue Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Semua Produk</title>
+  <link rel="stylesheet" href="css/homepage.css">
+   <link rel="stylesheet" href="css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <style>
-    /* Custom scrollbar (optional, for aesthetics) */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #E4181F;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #c0141a;
-    }
-
-    /* Ensuring Inter font is prioritized if available, otherwise Tailwind's defaults */
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f7fafc; /* Tailwind gray-100 */
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
     }
 
-    /* Sidebar specific transition */
-    .sidebar-transition {
-      transition: transform 0.3s ease-in-out;
+.sidebar {   
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 1500vh;       
+  background-color: #E4181F;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 1000;          
+}
+
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
     }
-    .h-10-ellipsis { /* Custom class for fixed height and ellipsis */
-        height: 2.5rem; /* Equivalent to h-10 */
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Show 2 lines */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
+
+    .logo img {
+      height: 50px;
+    }
+
+    .nav-item {
+      background-color: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      justify-content: space-between;
+    }
+
+    .nav-item.primary {
+      background-color: white;
+      color: #E4181F;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    .badgenew {
+      background: white;
+      color: #E4181F;
+      font-size: 12px;
+      border-radius: 12px;
+      padding: 2px 8px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        z-index: 1000;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: #E4181F;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        z-index: 1100;
+        font-size: 18px;
+      }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="flex min-h-screen">
-
-  <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-50 bg-[#E4181F] text-white p-2 rounded-md shadow-lg">
-    <i class="bi bi-list text-2xl"></i>
-  </button>
-
-  <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-40 w-72 bg-[#E4181F] text-white p-6 space-y-6 transform -translate-x-full lg:translate-x-0 flex flex-col shadow-lg">
-    <div class="flex items-center gap-3 pb-6 border-b border-white/20">
-      <img src="images/logoadmin.png" alt="Mixue Logo" class="h-12 w-12 rounded-full object-cover">
-      <span class="text-2xl font-bold">Mixue Admin</span>
+<body>
+  <body>
+  <body>
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Mixue Logo">
     </div>
 
-    <nav class="flex-grow space-y-3">
-      <a href="/admin" class="flex items-center justify-between px-4 py-3 rounded-lg bg-white text-[#E4181F] hover:bg-gray-100 transition-colors duration-200 shadow">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-shop icon text-xl"></i>
-          <span class="font-semibold">Semua Produk</span>
+    <div class="nav-item primary">
+      <a href="/admin" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-shop icon"></i> Semua Produk
         </span>
-      </a>
-      <a href="/editproduk" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-pencil-square icon text-xl"></i>
-          <span>Edit Produk</span>
-        </span>
-      </a>
-      <a href="/pesanan" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-calendar3 icon text-xl"></i>
-          <span>Pesanan</span>
-        </span>
-        <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">8</span>
-      </a>
-      <a href="/penjualan" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-cart3 icon text-xl"></i>
-          <span>Penjualan</span>
-        </span>
-        <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">3</span>
-      </a>
-    </nav>
-
-    <div class="pt-6 border-t border-white/20">
-      <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <i class="bi bi-box-arrow-left text-xl"></i>
-        <span>Logout</span>
       </a>
     </div>
-  </aside>
 
-  <main class="flex-1 p-6 lg:p-10 overflow-y-auto lg:ml-72">
-    <div class="space-y-12">
+    <div class="nav-item">
+      <a href="/editproduk" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-pencil-square icon"></i> Edit Produk
+        </span>
+      </a>
+    </div>
 
-      <section id="fresh-ice-cream">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Fresh Ice Cream</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/ChocolateCookiesSmoothies.png" class="w-full h-56 object-cover" alt="Chocolate Cookies Smoothies" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Chocolate Cookies Smoothies</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Cokelat pekat, renyah cookies, segar nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/StrawberryMi-shakeMixue.png" class="w-full h-56 object-cover" alt="Strawberry Mi-shake Mixue" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Strawberry Mi-shake Mixue</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Segar stroberi, lembut, manis menggoda.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/BobaShake.png" class="w-full h-56 object-cover" alt="Boba Shake - nikmat kenyal" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Boba Shake - nikmat kenyal</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Boba kenyal, susu lembut, segar manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/CreamyManggoBoba.png" class="w-full h-56 object-cover" alt="Creamy Manggo Boba" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Creamy Manggo Boba</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Mangga lembut, boba kenyal, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.22.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/BerryBeanSundae.png" class="w-full h-56 object-cover" alt="Berry Bean Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Berry Bean Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Manis, segar, beri, lembut, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/OreoSundae.png" class="w-full h-56 object-cover" alt="Oreo Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Oreo Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Cokelat, renyah, lembut, manis, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/StrawberryLuckySundae.png" class="w-full h-56 object-cover" alt="Strawberry Lucky Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Strawberry Lucky Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Segar, stroberi, manis, lembut, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/BobaSundae.png" class="w-full h-56 object-cover" alt="Boba Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Boba Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kenyal, manis, lembut, creamy, segar.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/mangoSmoothiesWithIce.png" class="w-full h-56 object-cover" alt="Mango Smoothies With Ice Cream" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Mango Smoothies With Ice Cream</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Mangga, segar, manis, creamy, dingin.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/StrawberrySmoothies.png" class="w-full h-56 object-cover" alt="Strawberry Smoothies" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Strawberry Smoothies</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Stroberi, segar, manis, dingin, lembut.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/MangoSundae.png" class="w-full h-56 object-cover" alt="Mango Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Mango Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Mangga, manis, segar, lembut, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/Sundae.png" class="w-full h-56 object-cover" alt="Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Lembut, manis, creamy, segar, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/StrawberrySundae.png" class="w-full h-56 object-cover" alt="Strawberry Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Strawberry Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Stroberi, manis, segar, lembut, creamy.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/MixSundae.png" class="w-full h-56 object-cover" alt="Mix Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Mix Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Campuran, manis, creamy, segar, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/StrawberryIceCream.png" class="w-full h-56 object-cover" alt="Strawberry Ice Cream" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Strawberry Ice Cream</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Stroberi, manis, creamy, segar, lembut.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.8.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/VanillaIceCream.png" class="w-full h-56 object-cover" alt="Vanilla Ice Cream" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Vanilla Ice Cream</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Vanila, creamy, lembut, manis, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.8.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/KiwiSmoothies.png" class="w-full h-56 object-cover" alt="Kiwi Smoothies" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Kiwi Smoothies</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kiwi, segar, asam, manis, lembut.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/IceCreamJasmineTea.png" class="w-full h-56 object-cover" alt="Ice Cream Jasmine Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Ice Cream Jasmine Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh melati, creamy, harum, segar, manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.13.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshIceCream/IceCreamEarlGreyTea.png" class="w-full h-56 object-cover" alt="Ice Cream Earl Grey Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Ice Cream Earl Grey Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh Earl Grey, creamy, harum, segar, manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.13.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-        </div> </section>
+    <div class="nav-item">
+      <a href="/pesanan" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-calendar3 icon"></i> Pesanan
+        </span>
+        <span class="badgenew">8</span>
+      </a>
+    </div>
 
-      <section id="real-fruit-tea">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Real Fruit Tea</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/PeachTeaEarlGreyTea.png" class="w-full h-56 object-cover" alt="Peach Tea Earl Grey Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Peach Tea Earl Grey Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh Earl Grey, peach, segar, harum, manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/MangoOatsJasmineTea.png" class="w-full h-56 object-cover" alt="Mango Oats Jasmine Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Mango Oats Jasmine Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Mangga, oat, teh melati, segar, manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/HawaiianFruitTea.png" class="w-full h-56 object-cover" alt="Hawaiian Fruit Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Hawaiian Fruit Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Tropis, segar, buah, manis, harum.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.22.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/PassionFruitJasmineTea.png" class="w-full h-56 object-cover" alt="Passion Fruit Jasmine Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Passion Fruit Jasmine Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Markisa, teh melati, segar, harum, manis.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.20.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/LemonJasmineTea.png" class="w-full h-56 object-cover" alt="Lemon Jasmine Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Lemon Jasmine Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Jeruk nipis, teh melati, segar, harum, asam.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.12.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/lemonEarlGreyTea.png" class="w-full h-56 object-cover" alt="Lemon Earl Grey Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Lemon Earl Grey Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Jeruk nipis, teh Earl Grey, segar, harum, asam.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.12.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/FreezeSqueezedLemonade.png" class="w-full h-56 object-cover" alt="Freeze Squeezed Lemonade" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Freeze Squeezed Lemonade</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Segar, asam, manis, dingin, menyegarkan.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.10.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/RealFruitTea/KiwiFruitTea.png" class="w-full h-56 object-cover" alt="Kiwi Fruit Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Kiwi Fruit Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kiwi, segar, asam, manis, harum.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.10.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-        </div> </section>
+    <div class="nav-item">
+      <a href="/penjualan" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-cart3 icon"></i> Penjualan
+        </span>
+        <span class="badgenew">3</span>
+      </a>
+    </div>
+  </div>
+</body>
+    <!--Produk Fresh Ice Cream-->
+   <div class="container mt-2">
+        <h2 class="text-center mb-2 py-5 display-5"><b>Fresh Ice Cream</b></h2>
+        <div class="row">
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/ChocolateCookiesSmoothies.png" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Chocolate Cookies Smoothies</h5>
+                        <p class="card-text text-muted">Cokelat pekat, renyah cookies, segar nikmat.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
 
-      <section id="milk-tea">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Milk Tea</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-           <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/OatsMilkTea.png" class="w-full h-56 object-cover" alt="Oats Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Oats Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Oat, creamy, manis, segar, lembut.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/RedBeanMilkTea.png" class="w-full h-56 object-cover" alt="Red Bean Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Red Bean Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kacang merah, creamy, manis, lembut, segar.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/CoconutJellyMilkTea.png" class="w-full h-56 object-cover" alt="Coconut Jelly Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Coconut Jelly Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kelapa, jelly, creamy, manis, segar.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/MilkTeaWith2Toppings.png" class="w-full h-56 object-cover" alt="Milk Tea With 2 Toppings" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Milk Tea With 2 Toppings</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Creamy, manis, lezat, segar, variatif.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/BrownSugarPearlMilkTea.png" class="w-full h-56 object-cover" alt="Brown Sugar Pearl Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Brown Sugar Pearl Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Gula merah, pearl, creamy, manis, kenyal.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/PearlMilkTea.png" class="w-full h-56 object-cover" alt="Pearl Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Pearl Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kenyal, creamy, manis, segar, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/MilkTea/SupremeMixedMilkTea.png" class="w-full h-56 object-cover" alt="Supreme Mixed Milk Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Supreme Mixed Milk Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Krimi, manis, kaya rasa, segar, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.19.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-        </div> </section>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/StrawberryMi-shakeMixue.png" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Strawberry Mi-shake Mixue</h5>
+                        <p class="card-text text-muted">Segar stroberi, lembut, manis menggoda.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
 
-      <section id="fresh-tea">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Fresh Tea</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshTea/EarlGreyTeaWith2Toppings.png" class="w-full h-56 object-cover" alt="Earl Grey Tea With 2 Toppings" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Earl Grey Tea With 2 Toppings</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh Earl Grey, harum, segar, variatif, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.13.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshTea/OriginalJasmineTea.png" class="w-full h-56 object-cover" alt="Original Jasmine Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Original Jasmine Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh melati, harum, segar, ringan, alami.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.10.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshTea/originalEarlGreyTea.png" class="w-full h-56 object-cover" alt="Original Earl Grey Tea" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Original Earl Grey Tea</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh Earl Grey, harum, segar, kuat, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.10.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/FreshTea/JasmineTeaWith2Toppings.png" class="w-full h-56 object-cover" alt="Jasmine Tea With 2 Toppings" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Jasmine Tea With 2 Toppings</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Teh melati, harum, segar, variatif, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.13.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-        </div> </section>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/BobaShake.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Boba Shake - nikmat kenyal</h5>
+                        <p class="card-text text-muted">Boba kenyal, susu lembut, segar manis.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
 
-      <section id="coffee">
-        <h2 class="text-4xl font-bold text-center mb-10 text-gray-800">Coffee</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/.png" class="w-full h-56 object-cover" alt="Lemon Coffee" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Lemon Coffee</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, jeruk nipis, segar, asam, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.14.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/AmericanoCoffee.png" class="w-full h-56 object-cover" alt="Americano Coffee" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Americano Coffee</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, kuat, pahit, segar, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.12.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/CoffeeBobaSundae.png" class="w-full h-56 object-cover" alt="Coffee Boba Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Coffee Boba Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, kenyal, manis, creamy, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.18.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/CoffeeCookiesSundae.png" class="w-full h-56 object-cover" alt="Coffee Cookies Sundae" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Coffee Cookies Sundae</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, cookies, creamy, manis, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.18.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/CoffeeSmoothieWithIcecream.png" class="w-full h-56 object-cover" alt="Coffee Smoothie With Ice cream" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Coffee Smoothie With Ice cream</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, es krim, creamy, segar, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/MochaMiShake.png" class="w-full h-56 object-cover" alt="Mocha Mi Shake" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Mocha Mi Shake</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Cokelat, kopi, creamy, manis, lezat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-            <img src="/img/Category/Coffee/CoffeeIceCream.png" class="w-full h-56 object-cover" alt="Coffee Ice Cream" onerror="this.src='https://placehold.co/400x300/e2e8f0/333?text=Image+Not+Found&fontsize=16'">
-            <div class="p-6">
-              <h5 class="text-xl font-semibold text-gray-900 mb-2">Coffee Ice Cream</h5>
-              <p class="text-sm text-gray-600 mb-3 h-10-ellipsis">Kopi, creamy, manis, segar, nikmat.</p>
-              <div class="flex justify-between items-center mb-4">
-                <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full">Tersedia</span>
-                <span class="text-2xl font-bold text-[#E4181F]">Rp.16.000</span>
-              </div>
-              <button class="w-full bg-[#E4181F] text-white py-2.5 rounded-lg hover:bg-[#c0141a] transition-colors duration-200 font-semibold">
-                Lihat Detail
-              </button>
-            </div>
-          </div>
-        </div> </section>
 
-    </div> </main>
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/CreamyManggoBoba.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Creamy Manggo Boba</h5>
+                        <p class="card-text text-muted">Mangga lembut, boba kenyal, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.22.000,-</strong></p>
 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/BerryBeanSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Berry Bean Sundae</h5>
+                        <p class="card-text text-muted">Manis, segar, beri, lembut, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/OreoSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Oreo Sundae</h5>
+                        <p class="card-text text-muted">Cokelat, renyah, lembut, manis, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/StrawberryLuckySundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Strawberry Lucky Sundae</h5>
+                        <p class="card-text text-muted">Segar, stroberi, manis, lembut, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/BobaSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">boba Sundae </h5>
+                        <p class="card-text text-muted">Kenyal, manis, lembut, creamy, segar.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/mangoSmoothiesWithIce.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mango Smoothies With Ice Cream</h5>
+                        <p class="card-text text-muted">Mangga, segar, manis, creamy, dingin.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/StrawberrySmoothies.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Strawberry Smoothies</h5>
+                        <p class="card-text text-muted">Stroberi, segar, manis, dingin, lembut.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/MangoSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mango Sundae</h5>
+                        <p class="card-text text-muted">Mangga, manis, segar, lembut, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/Sundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Sundae</h5>
+                        <p class="card-text text-muted">Lembut, manis, creamy, segar, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/StrawberrySundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Strawberry Sundae</h5>
+                        <p class="card-text text-muted">Stroberi, manis, segar, lembut, creamy.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/MixSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mix Sundae</h5>
+                        <p class="card-text text-muted">Campuran, manis, creamy, segar, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/StrawberryIceCream.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Strawberry Ice Cream</h5>
+                        <p class="card-text text-muted">Stroberi, manis, creamy, segar, lembut.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.8.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/VanillaIceCream.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Vanilla Ice Cream </h5>
+                        <p class="card-text text-muted">Vanila, creamy, lembut, manis, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.8.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/KiwiSmoothies.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Kiwi Smoothies </h5>
+                        <p class="card-text text-muted">Kiwi, segar, asam, manis, lembut.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/IceCreamJasmineTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Ice Cream Jasmine Tea</h5>
+                        <p class="card-text text-muted">Teh melati, creamy, harum, segar, manis.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.13.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshIceCream/IceCreamEarlGreyTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Ice Cream Earl Grey Tea</h5>
+                        <p class="card-text text-muted">Teh Earl Grey, creamy, harum, segar, manis.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.13.000,-</strong></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--Real Fruit Tea-->
+        <div class="container mt-5">
+        <h2 class="text-center mb-4 py-5 display-5"><b>Real Fruit Tea</b></h2>
+        <div class="row">
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/PeachTeaEarlGreyTea.png" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Peach Tea Earl Grey Tea </h5>
+                        <p class="card-text text-muted">Teh Earl Grey, peach, segar, harum, manis.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/MangoOatsJasmineTea.png" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Mango Oats Jasmine Tea</h5>
+                        <p class="card-text text-muted">Mangga, oat, teh melati, segar, manis.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/HawaiianFruitTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Hawaiian Fruit Tea</h5>
+                        <p class="card-text text-muted">Tropis, segar, buah, manis, harum.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.22.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/PassionFruitJasmineTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Passion Fruit Jasmine Tea</h5>
+                        <p class="card-text text-muted">Markisa, teh melati, segar, harum, manis.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.20.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/LemonJasmineTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Lemon Jasmine Tea</h5>
+                        <p class="card-text text-muted">Jeruk nipis, teh melati, segar, harum, asam.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.12.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/lemonEarlGreyTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">lemon Earl Grey Tea </h5>
+                        <p class="card-text text-muted">Jeruk nipis, teh Earl Grey, segar, harum, asam.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.12.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/FreezeSqueezedLemonade.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Freeze Squeezed Lemonade</h5>
+                        <p class="card-text text-muted">Segar, asam, manis, dingin, menyegarkan.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.10.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/RealFruitTea/KiwiFruitTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Kiwi Fruit Tea</h5>
+                        <p class="card-text text-muted">Kiwi, segar, asam, manis, harum.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.10.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <!--Milktea-->
+        <div class="container mt-5">
+        <h2 class="text-center mb-4 py-5 display-5"><b>Milk Tea</b></h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/OatsMilkTea.png" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Oats Milk Tea </h5>
+                        <p class="card-text text-muted">Oat, creamy, manis, segar, lembut.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/RedBeanMilkTea.png" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Red Bean Milk Tea </h5>
+                        <p class="card-text text-muted">Kacang merah, creamy, manis, lembut, segar.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/CoconutJellyMilkTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Coconut Jelly Milk Tea</h5>
+                        <p class="card-text text-muted">Kelapa, jelly, creamy, manis, segar.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/MilkTeaWith2Toppings.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Milk Tea With 2 Toppings</h5>
+                        <p class="card-text text-muted">Creamy, manis, lezat, segar, variatif.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/BrownSugarPearlMilkTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Brown Sugar Pearl Milk Tea</h5>
+                        <p class="card-text text-muted">Gula merah, pearl, creamy, manis, kenyal.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/PearlMilkTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pearl Milk Tea </h5>
+                        <p class="card-text text-muted">Kenyal, creamy, manis, segar, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/MilkTea/SupremeMixedMilkTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Supreme Mixed Milk Tea</h5>
+                        <p class="card-text text-muted">Krimi, manis, kaya rasa, segar, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.19.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--FreshTea-->
+        <div class="container mt-5">
+        <h2 class="text-center mb-4 py-5 display-6"><b>Fresh Tea</b></h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshTea/EarlGreyTeaWith2Toppings.png" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Earl Grey Tea With 2 Toppings</h5>
+                        <p class="card-text text-muted">Teh Earl Grey, harum, segar, variatif, lezat.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.13.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshTea/OriginalJasmineTea.png" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Original Jasmine Tea </h5>
+                        <p class="card-text text-muted">Teh melati, harum, segar, ringan, alami.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.10.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshTea/originalEarlGreyTea.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Original Earl Grey Tea </h5>
+                        <p class="card-text text-muted">Teh Earl Grey, harum, segar, kuat, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.10.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/FreshTea/JasmineTeaWith2Toppings.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Jasmine Tea With 2 Toppings </h5>
+                        <p class="card-text text-muted">Teh melati, harum, segar, variatif, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.13.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--Coofee-->
+        <div class="container mt-5">
+        <h2 class="text-center mb-4 py-5 display-5"><b>Coffee</b></h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/.png" class="card-img-top" alt="Product 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Lemon Coffee</h5>
+                        <p class="card-text text-muted">Kopi, jeruk nipis, segar, asam, nikmat.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.14.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/AmericanoCoffee.png" class="card-img-top" alt="Product 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Americano Coffee </h5>
+                        <p class="card-text text-muted">Kopi, kuat, pahit, segar, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.12.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+    
+            
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/CoffeeBobaSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Coffee Boba Sundae </h5>
+                        <p class="card-text text-muted">Kopi, kenyal, manis, creamy, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.18.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/CoffeeCookiesSundae.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Coffee Cookies Sundae</h5>
+                        <p class="card-text text-muted">Kopi, cookies, creamy, manis, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.18.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/CoffeeSmoothieWithIcecream.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Coffee Smoothie With Ice cream</h5>
+                        <p class="card-text text-muted">Kopi, es krim, creamy, segar, nikmat."
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/MochaMiShake.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Mocha Mi Shake</h5>
+                        <p class="card-text text-muted">Cokelat, kopi, creamy, manis, lezat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card product-card">
+                    <img src="/img/Category/Coffee/CoffeeIceCream.png" class="card-img-top" alt="Product 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Coffee Ice Cream</h5>
+                        <p class="card-text text-muted">Kopi, creamy, manis, segar, nikmat.
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success">Tersedia</span>
+                        </div>
+                        <p class="card-text"><strong>Rp.16.000,-</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+
+
+  
   <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.getElementById('sidebar');
-
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('-translate-x-full');
-    });
-
-    // Optional: Close sidebar when clicking outside on mobile
-    document.addEventListener('click', (event) => {
-      const isClickInsideSidebar = sidebar.contains(event.target);
-      const isClickOnMenuToggle = menuToggle.contains(event.target);
-
-      if (!isClickInsideSidebar && !isClickOnMenuToggle && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
-        sidebar.classList.add('-translate-x-full');
-      }
-    });
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
   </script>
 </body>
 </html>

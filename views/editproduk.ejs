@@ -1,178 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edit Produk - Mixue Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <style>
-    /* Custom scrollbar (optional, for aesthetics) */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #E4181F;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #c0141a;
-    }
-
-    /* Ensuring Inter font is prioritized if available, otherwise Tailwind's defaults */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Produk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f7fafc; /* Tailwind gray-100 */
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
     }
 
-    /* Sidebar specific transition */
-    .sidebar-transition {
-      transition: transform 0.3s ease-in-out;
+.sidebar {   
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 280vh;       
+  background-color: #E4181F;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 1000;          
+}
+
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
     }
-    /* Custom styles for number input arrows (optional) */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+
+    .logo img {
+      height: 50px;
     }
-    input[type=number] {
-      -moz-appearance: textfield; /* Firefox */
+
+    .nav-item {
+      background-color: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      justify-content: space-between;
+    }
+
+    .nav-item.primary {
+      background-color: white;
+      color: #E4181F;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    .badgenew {
+      background: white;
+      color: #E4181F;
+      font-size: 12px;
+      border-radius: 12px;
+      padding: 2px 8px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        z-index: 1000;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .menu-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: #E4181F;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        z-index: 1100;
+        font-size: 18px;
+      }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="flex min-h-screen">
+<body>
 
-  <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-50 bg-[#E4181F] text-white p-2 rounded-md shadow-lg">
-    <i class="bi bi-list text-2xl"></i>
-  </button>
-
-  <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-40 w-72 bg-[#E4181F] text-white p-6 space-y-6 transform -translate-x-full lg:translate-x-0 flex flex-col shadow-lg">
-    <div class="flex items-center gap-3 pb-6 border-b border-white/20">
-      <img src="images/logoadmin.png" alt="Mixue Logo" class="h-12 w-12 rounded-full object-cover">
-      <span class="text-2xl font-bold">Mixue Admin</span>
+    <!--Ini sidebar-->
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="/images/logo.png" alt="Mixue Logo">
     </div>
 
-    <nav class="flex-grow space-y-3">
-      <a href="/admin" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-shop icon text-xl"></i>
-          <span>Semua Produk</span>
+    <div class="nav-item">
+      <a href="/admin" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-shop icon"></i> Semua Produk
         </span>
-      </a>
-      <a href="/editproduk" class="flex items-center justify-between px-4 py-3 rounded-lg bg-white text-[#E4181F] hover:bg-gray-100 transition-colors duration-200 shadow">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-pencil-square icon text-xl"></i>
-          <span class="font-semibold">Edit Produk</span>
-        </span>
-      </a>
-      <a href="/pesanan" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-calendar3 icon text-xl"></i>
-          <span>Pesanan</span>
-        </span>
-        <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">8</span>
-      </a>
-      <a href="/penjualan" class="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <span class="flex items-center gap-3">
-          <i class="bi bi-cart3 icon text-xl"></i>
-          <span>Penjualan</span>
-        </span>
-        <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">3</span>
-      </a>
-    </nav>
-
-    <div class="pt-6 border-t border-white/20">
-      <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
-        <i class="bi bi-box-arrow-left text-xl"></i>
-        <span>Logout</span>
       </a>
     </div>
-  </aside>
 
-  <main class="flex-1 p-6 lg:p-10 overflow-y-auto lg:ml-72">
-    <h1 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-8">Edit Produk</h1>
+    <div class="nav-item primary">
+      <a href="/editproduk" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-pencil-square icon"></i> Edit Produk
+        </span>
+      </a>
+    </div>
 
-    <form action="/editproduk" method="POST" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Detail Produk
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Harga
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Quantity
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <% if (typeof products !== 'undefined' && products.length > 0) { %>
-              <% products.forEach((product, index) => { %>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 h-16 w-16">
-                      <img class="h-16 w-16 rounded-md object-cover" src="<%= product.image_url %>" alt="<%= product.name %>" onerror="this.src='https://placehold.co/64x64/e2e8f0/333?text=N/A&fontsize=12'">
-                    </div>
-                    <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900"><%= product.name %></div>
-                      </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <input type="hidden" name="products[<%= index %>][id]" value="<%= product.id %>">
-                  <input type="number" name="products[<%= index %>][price]" value="<%= product.price %>" min="0" step="100" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#E4181F] focus:border-[#E4181F] sm:text-sm" placeholder="Harga">
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <input type="number" name="products[<%= index %>][stock]" value="<%= product.stock %>" min="0" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#E4181F] focus:border-[#E4181F] sm:text-sm" placeholder="Stok">
-                </td>
-              </tr>
-              <% }) %>
-            <% } else { %>
-              <tr>
-                <td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                  Tidak ada produk untuk diedit.
-                </td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+    <div class="nav-item">
+      <a href="/pesanan" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-calendar3 icon"></i> Pesanan
+        </span>
+        <span class="badgenew">8</span>
+      </a>
+    </div>
 
-      <% if (typeof products !== 'undefined' && products.length > 0) { %>
-      <div class="mt-8 text-right">
-        <button type="submit" class="inline-flex justify-center py-2.5 px-6 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-[#E4181F] hover:bg-[#c0141a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E4181F] transition-colors duration-200">
-          Simpan Perubahan
-        </button>
-      </div>
-      <% } %>
-    </form>
-    </main>
+    <div class="nav-item">
+      <a href="/penjualan" style="text-decoration: none; color: inherit;">
+        <span>
+          <i class="bi bi-cart3 icon"></i> Penjualan
+        </span>
+        <span class="badgenew">3</span>
+      </a>
+    </div>
+  </div>
 
-  <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const sidebar = document.getElementById('sidebar');
+<!--Ini edit produk-->
+<form action="/editproduk" method="POST">
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Detail Produk</th>
+          <th scope="col">Harga</th>
+          <th scope="col">Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach((product, index) => { %>
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="<%= product.image_url %>" alt="<%= product.name %>" class="me-3" style="width: 80px; height: auto;">
+              <div>
+                <h6 class="mb-0"><%= product.name %></h6>
+              </div>
+            </div>
+          </td>
+          <td>
+            <!-- Tambahkan input hidden untuk id produk supaya bisa update -->
+            <input type="hidden" name="products[<%= index %>][id]" value="<%= product.id %>">
+            <input type="number" class="form-control" name="products[<%= index %>][price]" value="<%= product.price %>" min="0" step="0.01">
+          </td>
+          <td>
+            <input type="number" class="form-control" name="products[<%= index %>][stock]" value="<%= product.stock %>" min="0">
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('-translate-x-full');
-    });
+  <div class="text-end mt-4">
+    <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+  </div>
+</form>
 
-    // Optional: Close sidebar when clicking outside on mobile
-    document.addEventListener('click', (event) => {
-      const isClickInsideSidebar = sidebar.contains(event.target);
-      const isClickOnMenuToggle = menuToggle.contains(event.target);
-
-      if (!isClickInsideSidebar && !isClickOnMenuToggle && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
-        sidebar.classList.add('-translate-x-full');
-      }
-    });
-  </script>
-  </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
