@@ -170,6 +170,18 @@ app.post("/loginuser", (req, res) => {
   res.redirect(user.role === 'admin' ? "/admin" : "/index");
 });
 
+
+app.get("/penjualan", (req, res) => res.render("penjualan", { errors: [] }));
+//kategori
+app.get("/freshicecream", (req, res) => res.render("freshicecream", { errors: [] }));
+app.get("/milktea", (req, res) => res.render("milktea", { errors: [] }));
+app.get("/FreshTea", (req, res) => res.render("FreshTea", { errors: [] }));
+app.get("/coffee", (req, res) => res.render("coffee", { errors: [] }));
+app.get("/RealFruitTea", (req, res) => res.render("RealFruitTea", { errors: [] }));
+//ke notif user
+app.get("/notifikasi", (req, res) => res.render("notifikasi", { errors: [] }));
+
+
 app.get("/daftar", (req, res) => res.render("daftar", { errors: [] }));
 
 app.post("/daftar", (req, res) => {
@@ -220,6 +232,8 @@ app.get("/editproduk", mustBeAdmin, (req, res) => {
   const products = db.prepare("SELECT * FROM products").all();
   res.render("editproduk", { user: req.user, products });
 });
+
+
 
 app.post('/editproduk', mustBeAdmin, (req, res) => {
   const { products } = req.body;

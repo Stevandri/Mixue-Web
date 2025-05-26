@@ -1,170 +1,231 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pesanan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= typeof title !== 'undefined' ? title : 'Pesanan' %> - Mixue Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <%# Bootstrap CSS dipertahankan untuk styling tabel dan form-select yang sudah ada %>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #E4181F; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c0141a; }
+    body { font-family: 'Inter', Arial, sans-serif; background-color: #f7fafc; /* Tailwind gray-100 */ }
+    .sidebar-transition { transition: transform 0.3s ease-in-out; }
+
+    /* Styling untuk form-select dari Bootstrap dipertahankan jika masih digunakan */
+    /* Anda bisa menghapus ini jika sepenuhnya beralih ke select Tailwind */
+    .form-select {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .sidebar {
-      top: 0;
-      left: 0;
-      width: 300px;
-      height: 100vh;
-      background-color: #E4181F;
-      color: white;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease;
-      z-index: 1000;
+    .form-select-sm {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 30px;
+    .table {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .logo img {
-      height: 50px;
+    .table-bordered {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .nav-item {
-      background-color: rgba(255,255,255,0.15);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      justify-content: space-between;
+    .table-hover tbody tr:hover {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .nav-item.primary {
-      background-color: white;
-      color: #E4181F;
+    .align-middle {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
-    .icon {
-      margin-right: 10px;
-    }
-    .badgenew {
-      background: white;
-      color: #E4181F;
-      font-size: 12px;
-      border-radius: 12px;
-      padding: 2px 8px;
-    }
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        transform: translateX(-100%);
-      }
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      .menu-toggle {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background-color: #E4181F;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 12px;
-        z-index: 1100;
-        font-size: 18px;
-      }
+    .table-light {
+        /* Gaya Bootstrap asli atau kustomisasi Anda */
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+<body class="flex min-h-screen">
 
-<body>
-<!-- Sidebar -->
-<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-<div class="sidebar" id="sidebar">
-  <div class="logo">
-    <img src="/images/logo.png" alt="Mixue Logo">
-  </div>
+  <button id="menu-toggle" class="lg:hidden fixed top-4 left-4 z-[1001] bg-[#E4181F] text-white p-2 rounded-md shadow-lg">
+    <i class="bi bi-list text-2xl"></i>
+  </button>
 
-  <div class="nav-item">
-    <a href="/admin" style="text-decoration: none; color: inherit;">
-      <span><i class="bi bi-shop icon"></i> Semua Produk</span>
-    </a>
-  </div>
+  <aside id="sidebar" class="sidebar-transition fixed inset-y-0 left-0 z-[1000] w-72 bg-[#E4181F] text-white p-6 space-y-6 transform -translate-x-full lg:translate-x-0 flex flex-col shadow-lg">
+    <div class="flex items-center gap-3 pb-6 border-b border-white/20">
+      <img src="images/logoadmin.png" alt="Mixue Logo" class="h-12 w-12 rounded-full object-cover">
+      <span class="text-2xl font-bold">Mixue Admin</span>
+    </div>
 
-  <div class="nav-item">
-    <a href="/editproduk" style="text-decoration: none; color: inherit;">
-      <span><i class="bi bi-pencil-square icon"></i> Edit Produk</span>
-    </a>
-  </div>
+    <nav class="flex-grow space-y-3">
+      <a href="/admin" class="flex items-center justify-between px-4 py-3 rounded-lg <%= (typeof activePage !== 'undefined' && activePage === 'admin') ? 'bg-white text-[#E4181F] shadow' : 'hover:bg-white/20' %> transition-colors duration-200">
+        <span class="flex items-center gap-3">
+          <i class="bi bi-shop text-xl"></i>
+          <span class="<%= (typeof activePage !== 'undefined' && activePage === 'admin') ? 'font-semibold' : '' %>">Semua Produk</span>
+        </span>
+      </a>
+      <a href="/editproduk" class="flex items-center justify-between px-4 py-3 rounded-lg <%= (typeof activePage !== 'undefined' && activePage === 'editproduk') ? 'bg-white text-[#E4181F] shadow' : 'hover:bg-white/20' %> transition-colors duration-200">
+        <span class="flex items-center gap-3">
+          <i class="bi bi-pencil-square text-xl"></i>
+          <span class="<%= (typeof activePage !== 'undefined' && activePage === 'editproduk') ? 'font-semibold' : '' %>">Edit Produk</span>
+        </span>
+      </a>
+      <a href="/pesanan" class="flex items-center justify-between px-4 py-3 rounded-lg bg-white text-[#E4181F] shadow transition-colors duration-200">
+        <span class="flex items-center gap-3">
+          <i class="bi bi-calendar3 text-xl"></i>
+          <span class="font-semibold">Pesanan</span>
+        </span>
+        <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">
+          <%= (typeof newOrdersCount !== 'undefined' && newOrdersCount > 0) ? newOrdersCount : (typeof orders !== 'undefined' ? orders.filter(o => o.status === 'Belum diproses' || o.status === 'Diproses').length : '0') %>
+        </span>
+      </a>
+      <a href="/penjualan" class="flex items-center justify-between px-4 py-3 rounded-lg <%= (typeof activePage !== 'undefined' && activePage === 'penjualan') ? 'bg-white text-[#E4181F] shadow' : 'hover:bg-white/20' %> transition-colors duration-200">
+        <span class="flex items-center gap-3">
+          <i class="bi bi-cart3 text-xl"></i>
+          <span class="<%= (typeof activePage !== 'undefined' && activePage === 'penjualan') ? 'font-semibold' : '' %>">Penjualan</span>
+        </span>
+         <span class="bg-white text-[#E4181F] text-xs font-semibold px-2.5 py-1 rounded-full">
+           <%= (typeof pendingShipmentCount !== 'undefined' && pendingShipmentCount > 0) ? pendingShipmentCount : '0' %>
+         </span>
+      </a>
+    </nav>
 
-  <div class="nav-item primary">
-    <a href="/pesanan" style="text-decoration: none; color: inherit;">
-      <span><i class="bi bi-calendar3 icon"></i> Pesanan</span>
-      <span class="badgenew"><%= orders.length %></span>
-    </a>
-  </div>
+    <div class="pt-6 border-t border-white/20">
+      <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/20 transition-colors duration-200">
+        <i class="bi bi-box-arrow-left text-xl"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
 
-  <div class="nav-item">
-    <a href="/penjualan" style="text-decoration: none; color: inherit;">
-      <span><i class="bi bi-cart3 icon"></i> Penjualan</span>
-      <span class="badgenew">3</span>
-    </a>
-  </div>
-</div>
-
-<!-- Konten utama -->
-<div class="container py-5">
-  <h2 class="mb-4">Pesanan</h2>
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Pelanggan</th>
-          <th>Alamat</th>
-          <th>Produk</th>
-          <th>Kuantitas</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (orders.length === 0) { %>
-          <tr>
-            <td colspan="5" class="text-center text-muted">Belum ada pesanan.</td>
-          </tr>
-        <% } else { %>
-          <% orders.forEach(order => { %>
-            <tr>
-              <td><%= order.nama_pelanggan %></td>
-              <td><%= order.alamat %></td>
-              <td><%= order.nama_produk %></td>
-              <td><%= order.kuantitas %></td>
-              <td>
-                <select class="form-select form-select-sm">
-                  <option <%= order.status === 'Belum diproses' ? 'selected' : '' %>>Belum diproses</option>
-                  <option <%= order.status === 'Diproses' ? 'selected' : '' %>>Diproses</option>
-                  <option <%= order.status === 'Dikirim' ? 'selected' : '' %>>Dikirim</option>
-                  <option <%= order.status === 'Selesai' ? 'selected' : '' %>>Selesai</option>
-                </select>
-              </td>
-            </tr>
-          <% }) %>
+  <main class="flex-1 p-0 lg:ml-72 overflow-y-auto"> 
+    <div class="container py-5 px-4 md:px-6 lg:px-8"> 
+      <h2 class="mb-4 text-2xl lg:text-3xl font-bold text-gray-800">Daftar Pesanan</h2>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle text-sm md:text-base">
+            <thead class="table-light">
+              <tr>
+                <th class="px-3 py-2">ID & Tgl</th>
+                <th class="px-3 py-2">Pelanggan</th>
+                <th class="px-3 py-2">Alamat</th>
+                <th class="px-3 py-2">Produk</th>
+                <th class="px-3 py-2 text-center">Kuantitas</th>
+                <th class="px-3 py-2">Status</th>
+                <th class="px-3 py-2">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                  <tr>
+                    <td class="px-3 py-2 whitespace-nowrap">
+                        <div class="font-medium text-gray-900">#<%= order.id %></div>
+                        <div class="text-xs text-gray-500"><%= new Date(order.tanggal_pesanan).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) %></div>
+                    </td>
+                    <td class="px-3 py-2"><%= order.pelanggan_nama %></td>
+                    <td class="px-3 py-2 max-w-xs truncate" title="<%= order.alamat_pengiriman %>"><%= order.alamat_pengiriman %></td>
+                    <td class="px-3 py-2">
+                        <% if (order.items && order.items.length > 0) { %>
+                            <ul class="list-none p-0 m-0 space-y-0.5">
+                                <% order.items.forEach(item => { %>
+                                    <li class="text-xs"><%= item.nama_produk %> (x<%= item.kuantitas %>)</li>
+                                <% }); %>
+                            </ul>
+                        <% } else { %>
+                            Nama Produk
+                        <% } %>
+                    </td>
+                    <td class="px-3 py-2 text-center">
+                        <% if (order.items && order.items.length > 0) { %>
+                            <%= order.items.reduce((total, item) => total + item.kuantitas, 0) %>
+                        <% } else { %>
+                            0
+                        <% } %>
+                    </td>
+                    <td class="px-3 py-2">
+                      <form action="/pesanan/update-status/<%= order.id %>" method="POST" id="form-status-<%= order.id %>">
+                        <select name="status" class="form-select form-select-sm w-full focus:ring-1 focus:ring-[#E4181F] focus:border-[#E4181F]" onchange="this.form.requestSubmit()">
+                          <option value="Belum diproses" <%= order.status === 'Belum diproses' ? 'selected' : '' %>>Belum diproses</option>
+                          <option value="Diproses" <%= order.status === 'Diproses' ? 'selected' : '' %>>Diproses</option>
+                          <option value="Dikirim" <%= order.status === 'Dikirim' ? 'selected' : '' %>>Dikirim</option>
+                          <option value="Selesai" <%= order.status === 'Selesai' ? 'selected' : '' %>>Selesai</option>
+                          <option value="Dibatalkan" <%= order.status === 'Dibatalkan' ? 'selected' : '' %>>Dibatalkan</option>
+                        </select>
+                      </form>
+                    </td>
+                    <td class="px-3 py-2 text-center">
+                        <button type="submit" form="form-status-<%= order.id %>" class="text-white bg-[#E4181F] hover:bg-[#c0141a] px-3 py-1.5 rounded-md text-xs transition-colors duration-150">
+                            Update
+                        </button>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="text-center text-muted py-4">Belum ada pesanan.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+        <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4">
+          <div class="flex-1 flex justify-between sm:hidden">
+            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              Previous
+            </a>
+            <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              Next
+            </a>
+          </div>
+          <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p class="text-sm text-gray-700">
+                Menampilkan
+                <span class="font-medium">1</span>
+                sampai
+                <span class="font-medium"><%= orders.length %></span>
+                dari
+                <span class="font-medium"><%= orders.length %></span>
+                hasil
+              </p>
+            </div>
+            <div>
+              <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  <span class="sr-only">Previous</span>
+                  <i class="bi bi-chevron-left h-5 w-5"></i>
+                </a>
+                <a href="#" aria-current="page" class="z-10 bg-red-50 border-red-500 text-red-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                  1
+                </a>
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  <span class="sr-only">Next</span>
+                  <i class="bi bi-chevron-right h-5 w-5"></i>
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
         <% } %>
-      </tbody>
-    </table>
-  </div>
-</div>
+    </div>
+  </main>
 
-<script>
-  function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-  }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    if (menuToggle && sidebar) {
+      menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+      });
+      document.addEventListener('click', (event) => {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickOnMenuToggle = menuToggle.contains(event.target);
+        if (!isClickInsideSidebar && !isClickOnMenuToggle && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+          sidebar.classList.add('-translate-x-full');
+        }
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
