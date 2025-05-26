@@ -179,7 +179,6 @@ app.get("/FreshTea", (req, res) => res.render("FreshTea", { errors: [] }));
 app.get("/coffee", (req, res) => res.render("coffee", { errors: [] }));
 app.get("/RealFruitTea", (req, res) => res.render("RealFruitTea", { errors: [] }));
 //ke notif user
-app.get("/notifikasi", (req, res) => res.render("notifikasi", { errors: [] }));
 
 
 app.get("/daftar", (req, res) => res.render("daftar", { errors: [] }));
