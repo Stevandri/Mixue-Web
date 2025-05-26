@@ -66,6 +66,16 @@ function getCartItemCount(userId) {
   return row.count || 0;
 }
 
+const session = require('express-session');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret-key',  // jangan lupa bikin .env dan isi SESSION_SECRET
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  // kalau mau https, ganti jadi true
+}));
+
+
 // app config
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -499,9 +509,104 @@ app.post('/checkout', mustBeLoggedin, (req, res) => {
     return res.status(400).send("Produk terpilih tidak ditemukan di keranjang.");
   }
 
+  // Hapus produk dari keranjang yang sudah dipilih
+  const deleteQuery = `DELETE FROM carts WHERE user_id = ? AND product_id IN (${placeholders})`;
+  db.prepare(deleteQuery).run(userId, ...selectedIds);
+
   // Render halaman form checkout, kirim data produk dan user
   res.render('checkout', { user: req.user, cartItems: selectedCarts });
 });
+
+app.post('/checkout-submit', mustBeLoggedin, (req, res) => {
+  const userId = req.user.userid;
+  const { recipient_name, recipient_phone, address, payment_method, products } = req.body;
+
+  if (!recipient_name || !recipient_phone || !address || !payment_method || !products) {
+    return res.status(400).send("Data pesanan tidak lengkap");
+  }
+
+  try {
+    const insertOrder = db.prepare(`
+      INSERT INTO orders (user_id, created_at, recipient_name, recipient_phone, address, payment_method)
+      VALUES (?, datetime('now'), ?, ?, ?, ?)
+    `);
+    const infoOrder = insertOrder.run(userId, recipient_name, recipient_phone, address, payment_method);
+    const orderId = infoOrder.lastInsertRowid;
+
+    const getProduct = db.prepare("SELECT price FROM products WHERE id = ?");
+    const insertItem = db.prepare(`
+      INSERT INTO order_items (order_id, product_id, quantity, price)
+      VALUES (?, ?, ?, ?)
+    `);
+
+    for (const [productId, qty] of Object.entries(products)) {
+      const product = getProduct.get(productId);
+      if (!product) continue;
+      insertItem.run(orderId, productId, parseInt(qty), product.price);
+    }
+
+    // Hapus dari keranjang untuk jaga-jaga
+    const productIds = Object.keys(products);
+    if (productIds.length > 0) {
+      const placeholders = productIds.map(() => '?').join(',');
+      const deleteCart = db.prepare(`DELETE FROM carts WHERE user_id = ? AND product_id IN (${placeholders})`);
+      deleteCart.run(userId, ...productIds);
+    }
+
+    // Simpan notifikasi pesanan
+    const insertNotif = db.prepare(`
+      INSERT INTO notifications (user_id, message, created_at)
+      VALUES (?, ?, datetime('now'))
+    `);
+    const notifMessage = `Pesanan #${orderId} berhasil dibuat. Terima kasih telah berbelanja!`;
+    insertNotif.run(userId, notifMessage);
+
+    // Simpan status bahwa user sudah melakukan checkout
+    req.session.lastOrderId = orderId;
+
+    res.redirect('/notifikasi');
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error proses checkout');
+  }
+});
+
+
+
+app.get('/notifikasi', (req, res) => {
+  try {
+    // Reset flag agar bisa checkout lagi nanti
+    req.session.orderCompleted = false;
+
+    const getNotifications = db.prepare('SELECT * FROM notifications ORDER BY created_at DESC');
+    const notifs = getNotifications.all();
+
+    res.render('notifikasi', { notifs });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error mengambil data notifikasi');
+  }
+});
+
+
+
+// Route untuk admin lihat pesanan
+app.get('/pesanan', mustBeAdmin, (req, res) => {
+  // Ambil semua orders
+  const orders = db.prepare('SELECT * FROM orders ORDER BY created_at DESC').all();
+
+  // Ambil semua order_items untuk tiap order
+  const getOrderItems = db.prepare('SELECT oi.*, p.name FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE order_id = ?');
+
+  // Tambahkan items ke tiap order
+  orders.forEach(order => {
+    order.items = getOrderItems.all(order.id);
+  });
+
+  res.render('pesanan', { orders });
+});
+
 
 
 

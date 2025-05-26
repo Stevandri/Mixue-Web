@@ -97,11 +97,25 @@
     }
   </style>
 </head>
+<script>
+  // Cegah kembali ke halaman ini jika sudah diakses sebelumnya
+  if (performance.navigation.type === 2) {
+    // User menekan tombol back
+    window.location.href = '/'; // Atau arahkan ke halaman lain
+  }
+
+  // Prevent back navigation
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
+</script>
+
 <body>
   <div class="container">
     <h2>Checkout Pesanan</h2>
 
-    <form action="/checkout/submit" method="POST">
+    <form action="/checkout-submit" method="POST">
       <div>
         <% let totalPrice = 0; %>
         <% cartItems.forEach(item => { %>
